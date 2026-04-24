@@ -1,13 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import sqlite3
 
-url = "https://www.tennisabstract.com/cgi-bin/leaders.cgi"
+url = "https://tennisabstract.com/reports/atp_elo_ratings.html"
 
+conn = sqlite3.connect("/Users/amri/databases/tennis_data.db")
+cursor = conn.cursor()
 response = requests.get(url)
-soup = BeautifulSoup(response.text, "lxml")
-
-table = soup.find("table")
-df = pd.read_html(str(table))[0]
-
-print(df.head())
+soup = BeautifulSoup(response.text, "html.parser")
+table = soup.find("table", {"class": "tablesorter"})
+print(table)
